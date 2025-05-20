@@ -1,5 +1,4 @@
-# Lexy BE
-Welcome to the Interview Backend Challenge! This project is built with **FastAPI** for serving the API and **Pydantic** for robust data validation, following a clean architecture approach to ensure maintainability and scalability.
+This project is built with **FastAPI** for serving the API and **Pydantic** for robust data validation, following a clean architecture approach to ensure maintainability and scalability.
 
 ## 🎯 Objectives
 
