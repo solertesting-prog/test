@@ -1,0 +1,29 @@
+[project]
+name = "interview-backend"
+version = "0.1.0"
+description = "Backend challenge"
+authors = [{ name = "Abrahan Gil", email = "abrahan.gil@mylexy.co" }]
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "beanie>=1.29.0",
+    "fastapi>=0.115.12",
+    "passlib>=1.7.4",
+    "pydantic-settings>=2.9.1",
+    "pydantic[email]>=2.11.4",
+    "uvicorn>=0.34.2",
+    "pyjwt>=2.10.1",
+    "python-multipart>=0.0.20",
+    "bcrypt==4.0.1",
+]
+
+
+[project.optional-dependencies]
+dev = [
+    "black>=23.9.1",
+    "pytest-cov>=4.1.0",
+    "pytest-mock>=3.11.0",
+    "pytest-asyncio>=0.26.0",
+    "httpx>=0.28.1",
+    "mongomock-motor>=0.0.35",
+]

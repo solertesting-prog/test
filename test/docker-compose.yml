@@ -1,0 +1,25 @@
+services:
+  api:
+    restart: always
+    build: .
+    command: bash -c 'while !</dev/tcp/db_mongo/27017; do sleep 1; done; python -m uvicorn app:app --reload --host 0.0.0.0 --port 3001 --timeout-keep-alive 300'
+    ports:
+      - 3001:3001
+    volumes:
+      - .:/app
+    depends_on:
+      - db_mongo
+  db_mongo:
+    image: mongo:latest
+    volumes:
+      - shared_data:/var/lib/mongodb/data/
+    expose:
+      - 27017
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_DATABASE: "interview_db"
+      MONGO_INITDB_ROOT_USERNAME: "interview_db"
+      MONGO_INITDB_ROOT_PASSWORD: "interview_db"
+volumes:
+  shared_data:
