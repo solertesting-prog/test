@@ -5,9 +5,10 @@ from fastapi import APIRouter, Depends, HTTPException
 from fastapi.security import OAuth2PasswordRequestForm
 from pydantic import SecretStr
 
-from app.core.users.entities.user import UserRegistry
-from app.core.users.services import user_service
+from app.core.users.entities.user import UserRegistry, UserInterests
 from app.core.users.services.exceptions import UserNotFound
+
+from app.core.users.services import user_service
 
 from ..auth import Token, create_access_token, verify_password
 from ..container import dependencies, get_current_user
@@ -72,6 +73,21 @@ async def get_user_interests(user_id: UUID):
             userId=user_id,
         )
         return {"message": "User interests retrieved successfully", "interests": user_interests}
+    except UserNotFound:
+        raise HTTPException(status_code=404, detail="User not found")
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e)) 
+    
+@router.delete("/{user_id}/interests/{interest}")
+async def delete_user_interest(user_id: UUID, interest: UserInterests):
+    """Delete a specific interest from a user."""
+    try:
+        updated_user = await user_service.remove_interest(
+            user_repository=user_repository,
+            userID=user_id,
+            interest=interest,
+        )
+        return {"message": "Interest removed successfully", "user": updated_user}
     except UserNotFound:
         raise HTTPException(status_code=404, detail="User not found")
     except Exception as e:

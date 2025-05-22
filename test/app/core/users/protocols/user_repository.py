@@ -44,3 +44,7 @@ class UserRepository(Protocol):
     async def fetch_user_interests(self, id: UUID) -> List[UserInterests]:
     
         ...
+
+    async def remove_user_interest(self, user_id: UUID, interest: UserInterests) -> Optional[User]:
+
+        ...

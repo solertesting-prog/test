@@ -1,9 +1,9 @@
-from typing import List
+from typing import List, Optional
 from uuid import UUID
 
 from ..entities.user import CreateUserDto, User, UserInterests, UserRegistry
 from ..protocols.user_repository import UserRepository
-from .exceptions import UserAlreadyExists, UserNotFound
+from .exceptions import UserAlreadyExists, UserInterestNotFound, UserNotFound
 
 
 async def create_user(
@@ -94,24 +94,6 @@ async def add_interest(
     ...  # TODO: Implement the logic to add an interest to a user
 
 
-async def remove_interest(
-    user_repository: UserRepository,
-    user: UserRegistry,
-    interest: UserInterests,
-) -> User:
-    """Remove an interest from a user.
-
-    Args:
-        user_repository (UserRepository): The user repository instance.
-        user (UserRegistry): The user from whom the interest will be removed.
-        interest (UserInterests): The interest to remove.
-
-    Raises:
-        UserNotFound: If the user with the given ID does not exist.
-        UserInterestNotFound: If the interest does not exist for the user.
-    """
-    ...  # TODO: Implement the logic to remove an interest from a user
-
 import logging
 
 # Configuración básica del logging
@@ -119,6 +101,38 @@ logging.basicConfig(
     level=logging.INFO,  # Nivel de logging
     format="%(asctime)s - %(levelname)s - %(message)s",  # Formato del mensaje
 )
+
+
+async def remove_interest(
+    user_repository: UserRepository,
+    userID: UUID,
+    interest: UserInterests,
+) -> Optional[User]:
+    """Remove an interest from a user.
+
+    Args:
+        user_repository (UserRepository): The user repository instance.
+        userID (UUID): The ID of the user from whom the interest will be removed.
+        interest (UserInterests): The interest to remove.
+
+    Raises:
+        UserNotFound: If the user with the given ID does not exist.
+        UserInterestNotFound: If the interest does not exist for the user.
+
+    Returns:
+        User: The updated user after removing the interest.
+    """
+    user = await user_repository.fetch_by_id(userID)
+    if not user:
+        raise UserNotFound(userID)
+
+    if interest not in user.interests:
+        raise UserInterestNotFound(interest)
+
+    updated_user = await user_repository.remove_user_interest(userID, interest)
+
+ 
+    return updated_user
 
 async def get_user_interests(
     user_repository: UserRepository,

@@ -66,3 +66,31 @@ async def fetch_user_interests(user_id: UUID) -> Optional[list[UserInterests]]:
     logging.info(f"Interests for user {user_id}: {user.interests}")
 
     return user.interests
+
+async def remove_user_interest(user_id: UUID, interest: str) -> Optional[User]:
+    """Remove a specific interest from a user in the database.
+
+    Args:
+        user_id (UUID): The ID of the user whose interest will be removed.
+        interest (str): The interest to remove.
+
+    Returns:
+        Optional[User]: The updated user if the operation is successful, or None if the user does not exist.
+    """
+    logging.info(f"Removing interest '{interest}' for user with ID: {user_id}")
+
+    user = await UserModel.get(user_id)
+    if not user:
+        logging.warning(f"User with ID {user_id} not found.")
+        return None
+
+    if interest not in user.interests:
+        logging.warning(f"Interest '{interest}' not found for user with ID {user_id}.")
+        return None
+
+    user.interests.remove(interest)
+
+    await user.save()
+
+    logging.info(f"Interest '{interest}' removed for user with ID {user_id}.")
+    return User(**user.model_dump())
