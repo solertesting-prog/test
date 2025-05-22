@@ -48,3 +48,6 @@ class UserRepository(Protocol):
     async def remove_user_interest(self, user_id: UUID, interest: UserInterests) -> Optional[User]:
 
         ...
+
+    async def add_user_interest(self, user_id: UUID, interest: UserInterests) -> Optional[User]:
+        ...

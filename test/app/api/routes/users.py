@@ -92,3 +92,18 @@ async def delete_user_interest(user_id: UUID, interest: UserInterests):
         raise HTTPException(status_code=404, detail="User not found")
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
+    
+@router.post("/{user_id}/interests/{interest}")
+async def add_user_interest(user_id: UUID, interest: UserInterests):
+    """Add a specific interest to a user."""
+    try:
+        updated_user = await user_service.add_interest(
+            user_repository=user_repository,
+            userID=user_id,
+            interest=interest,
+        )
+        return {"message": "Interest added successfully", "user": updated_user}
+    except UserNotFound:
+        raise HTTPException(status_code=404, detail="User not found")
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))

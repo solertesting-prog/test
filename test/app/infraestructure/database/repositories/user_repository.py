@@ -94,3 +94,31 @@ async def remove_user_interest(user_id: UUID, interest: str) -> Optional[User]:
 
     logging.info(f"Interest '{interest}' removed for user with ID {user_id}.")
     return User(**user.model_dump())
+
+async def add_user_interest(user_id: UUID, interest: UserInterests) -> Optional[User]:
+    """Add a specific interest to a user in the database.
+
+    Args:
+        user_id (UUID): The ID of the user to whom the interest will be added.
+        interest (str): The interest to add.
+
+    Returns:
+        Optional[User]: The updated user if the operation is successful, or None if the user does not exist.
+    """
+    logging.info(f"Adding interest '{interest}' for user with ID: {user_id}")
+
+    user = await UserModel.get(user_id)
+    if not user:
+        logging.warning(f"User with ID {user_id} not found.")
+        return None
+
+    if interest in user.interests:
+        logging.warning(f"Interest '{interest}' already exists for user with ID {user_id}.")
+        return None
+
+    user.interests.append(interest)
+
+    await user.save()
+
+    logging.info(f"Interest '{interest}' added for user with ID {user_id}.")
+    return User(**user.model_dump())

@@ -3,7 +3,7 @@ from uuid import UUID
 
 from ..entities.user import CreateUserDto, User, UserInterests, UserRegistry
 from ..protocols.user_repository import UserRepository
-from .exceptions import UserAlreadyExists, UserInterestNotFound, UserNotFound
+from .exceptions import UserAlreadyExists, UserInterestAlreadyExists, UserInterestNotFound, UserNotFound
 
 
 async def create_user(
@@ -77,21 +77,35 @@ async def get_user_by_id(
 
 async def add_interest(
     user_repository: UserRepository,
-    user: UserRegistry,
+    userID: UUID,
     interest: UserInterests,
-) -> User:
+) -> Optional[User]:
     """Add an interest to a user.
 
     Args:
         user_repository (UserRepository): The user repository instance.
-        user (UserRegistry): The user to whom the interest will be added.
+        userID (UUID): The ID of the user to whom the interest will be added.
         interest (UserInterests): The interest to add.
 
     Raises:
         UserNotFound: If the user with the given ID does not exist.
         UserInterestAlreadyExists: If the interest already exists for the user.
+
+    Returns:
+        User: The updated user after adding the interest.
     """
-    ...  # TODO: Implement the logic to add an interest to a user
+    user = await user_repository.fetch_by_id(userID)
+    if not user:
+        raise UserNotFound(userID)
+
+    if interest in user.interests:
+        raise UserInterestAlreadyExists(interest)
+
+    updated_user = await user_repository.add_user_interest(userID, interest)
+
+    logging.info(f"Interest '{interest}' added to user with ID {userID}")
+
+    return updated_user
 
 
 import logging
@@ -144,4 +158,4 @@ async def get_user_interests(
 
     return user_interests
 
-    ...  # TODO: Implement the logic to get all interests of a user
+

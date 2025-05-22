@@ -20,3 +20,11 @@ class UserAlreadyExists(Exception):
     def __init__(self, email: str):
         self.email = email
         super().__init__(f"User with email {email} already exists.")
+
+class UserInterestAlreadyExists(Exception):
+    """Exception raised when a user's interest already exists."""
+
+    def __init__(self, interest: str):
+        self.interest = interest
+        super().__init__(f"Interest '{interest}' already exists for the user.")
+        
