@@ -1,7 +1,8 @@
 from dataclasses import dataclass
 from typing import Annotated, Callable, cast
+from datetime import datetime, timezone
 
-from fastapi import Depends
+from fastapi import Depends, HTTPException
 from fastapi.security import OAuth2PasswordBearer
 
 # Protocols
@@ -14,6 +15,7 @@ from app.infraestructure.database.repositories import (
     news_articles_repository,
     user_repository,
 )
+from jwt import ExpiredSignatureError
 
 from .auth import decode_access_token
 
@@ -56,8 +58,12 @@ async def get_current_user(
     Returns:
         UserRegistry: The user registry instance.
     """
-    # TODO: When the token is expired, it should return a 401 error
-    payload = decode_access_token(token)
+    try:
+     payload = decode_access_token(token)
+    
+    except ExpiredSignatureError:
+        raise HTTPException(status_code=401, detail="Token has expired")
+  
     return UserRegistry(id=payload.sub)
 
 
