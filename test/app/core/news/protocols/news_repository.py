@@ -1,8 +1,7 @@
-from ..entities.news_article import NewsArticle, UpdateNewsArticleDto, NewsCategory
+from ..entities.news_article import NewsArticle, NewsCategory, UpdateNewsArticleDto
 from typing import List, Optional, Protocol
 
 from uuid import UUID
-
 
 
 class NewsArticleRepository(Protocol):
@@ -26,8 +25,10 @@ class NewsArticleRepository(Protocol):
             id (UUID): The ID of the news article to retrieve.
         """
         ...
-    
-    async def fetch_all_by_category(self, category: NewsCategory, limit: int, skip: int) -> List[NewsArticle]:
+
+    async def fetch_all_by_category(
+        self, category: NewsCategory|None, limit: int, skip: int
+    ) -> List[NewsArticle]:
         """Fetch news articles by category from the database.
 
         Args:
@@ -37,7 +38,9 @@ class NewsArticleRepository(Protocol):
         """
         ...
 
-    async def update(self, id: UUID, dto: UpdateNewsArticleDto) -> Optional[NewsArticle]:
+    async def update(
+        self, id: UUID, dto: UpdateNewsArticleDto
+    ) -> Optional[NewsArticle]:
         """Update an existing news article in the database.
 
         Args:

@@ -1,7 +1,8 @@
 from typing import List
 from uuid import UUID
 
-from ..entities.news_article import NewsArticle, NewsCategory
+
+from ..entities.news_article import NewsArticle, NewsCategory, UpdateNewsArticleDto
 from ..protocols.news_repository import NewsArticleRepository
 from .exceptions import NewsArticleNotFound
 
@@ -26,5 +27,19 @@ async def get_all_news_articles(
     return await news_article_repository.fetch_all_by_category(
         category=category, limit=limit, skip=skip
     )
+
+async def update_news_article(
+    news_article_repository: NewsArticleRepository,
+    id:UUID ,
+    news_article: UpdateNewsArticleDto
+) -> NewsArticle:
+
+   news_article_updated= await news_article_repository.update(
+        dto=news_article,id=id
+    )
+   if not news_article_updated:
+        raise NewsArticleNotFound(article_id=id)
+   return news_article_updated
+
 
 

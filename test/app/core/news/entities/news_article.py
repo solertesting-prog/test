@@ -35,4 +35,6 @@ class CreateNewsArticleDto(BaseModel):
     content: str = Field(..., max_length=5000)
 
 
-class UpdateNewsArticleDto(BaseModel): ...
+class UpdateNewsArticleDto(BaseModel):
+    title: str | None = None
+    content: str | None = None
