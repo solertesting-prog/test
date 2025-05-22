@@ -20,17 +20,11 @@ async def get_all_news_articles(
     news_article_repository: NewsArticleRepository,
     skip: int = 0,
     limit: int = 100,
+    category: NewsCategory | None = None,
 ) -> List[NewsArticle]:
     """Fetch all news articles with pagination."""
-    # TODO: Implement pagination logic
-    raise NotImplementedError("Fetching all news articles is not implemented yet.")
+    return await news_article_repository.fetch_all_by_category(
+        category=category, limit=limit, skip=skip
+    )
 
 
-async def get_news_articles_by_category(
-    news_article_repository: NewsArticleRepository,
-    category: NewsCategory,
-    skip: int = 0,
-    limit: int = 100,
-) -> List[NewsArticle]:
-    """Fetch news articles by category with pagination."""
-    raise NotImplementedError("Fetching news articles by category is not implemented yet.")

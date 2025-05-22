@@ -36,12 +36,16 @@ async def fetch_by_id(id: UUID) -> Optional[NewsArticle]:
 
 
 async def fetch_all_by_category(
-    category: NewsCategory, limit: int, skip: int
+    category: Optional[NewsCategory], limit: int, skip: int
 ) -> List[NewsArticle]:
-    raise NotImplementedError(
-        "Fetching news articles by category is not implemented yet."
-    )
+    if category:
+        articles = await NewsArticleModel.find(NewsArticleModel.categories == category).skip(skip).limit(limit).to_list()
+    else:
+        articles = await NewsArticleModel.find().skip(skip).limit(limit).to_list()
 
+    if not articles:
+        return []
+    return [NewsArticle(**article.model_dump()) for article in articles]
 
 async def update(id: UUID, dto: UpdateNewsArticleDto) -> Optional[NewsArticle]:
     raise NotImplementedError("Updating news articles is not implemented yet.")
