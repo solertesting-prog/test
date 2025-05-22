@@ -42,7 +42,7 @@ def create_access_token(user_registry: UserRegistry) -> str:
         str: The encoded JWT token.
     """
     to_encode = {
-        "sub": user_registry.id,
+        "sub": str(user_registry.id),
         "exp": datetime.now(tz=timezone.utc) + timedelta(minutes=30),
         "iat": datetime.now(tz=timezone.utc),
     }
