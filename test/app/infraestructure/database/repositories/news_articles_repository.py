@@ -1,13 +1,11 @@
-# TODO: implement all missing methods
 from typing import List, Optional
 from uuid import UUID
 import logging
 
 
-# Configuración básica
 logging.basicConfig(
-    level=logging.INFO,  # Nivel mínimo de log que se registrará
-    format="%(asctime)s - %(levelname)s - %(message)s",  # Formato del mensaje
+    level=logging.INFO,
+    format="%(asctime)s - %(levelname)s - %(message)s", 
 )
 
 from app.core.news.entities.news_article import (

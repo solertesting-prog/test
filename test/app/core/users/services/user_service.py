@@ -1,4 +1,5 @@
 from typing import List
+from uuid import UUID
 
 from ..entities.user import CreateUserDto, User, UserInterests, UserRegistry
 from ..protocols.user_repository import UserRepository
@@ -23,6 +24,17 @@ async def create_user(
 
     return created_user
 
+async def delete_user(
+    user_repository: UserRepository,
+    userId: UUID,
+) -> User:
+    fetched_user = await user_repository.fetch_by_id(userId)
+    if not fetched_user:
+        raise UserNotFound(userId)
+
+    deleted_user = await user_repository.remove(userId)
+
+    return deleted_user
 
 async def get_user_by_username(
     user_repository: UserRepository,

@@ -1,4 +1,5 @@
 from typing import Annotated
+from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.security import OAuth2PasswordRequestForm
@@ -48,3 +49,16 @@ async def auth_user(form_data: Annotated[OAuth2PasswordRequestForm, Depends()]):
         access_token=create_access_token(user_registry=UserRegistry(id=user.id)),
         token_type="bearer",
     )
+
+@router.delete("/{user_id}")
+async def delete_user(user_id: UUID):
+    try:
+        deleted_user = await user_service.delete_user(
+            user_repository=user_repository,
+            userId=user_id,
+        )
+        return {"message": "User deleted successfully", "user": deleted_user}
+    except UserNotFound:
+        raise HTTPException(status_code=404, detail="User not found")
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))

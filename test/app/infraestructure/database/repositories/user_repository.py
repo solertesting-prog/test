@@ -39,5 +39,11 @@ async def fetch_by_username(username: str) -> Optional[User]:
 
     return User(**user.model_dump())
 
-async def remove(id: UUID) -> User:
-    raise NotImplementedError("User removal is not implemented yet.")
+async def remove(id: UUID) -> Optional[User]:
+    user = await UserModel.get(id)
+    if not user:
+        return None  
+
+    await user.delete()
+
+    return User(**user.model_dump())
