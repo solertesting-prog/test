@@ -1,8 +1,8 @@
-from typing import Protocol, Optional
+from typing import List, Protocol, Optional
 from uuid import UUID
 
 
-from ..entities.user import User, CreateUserDto
+from ..entities.user import User, CreateUserDto, UserInterests
 
 
 class UserRepository(Protocol):
@@ -39,4 +39,8 @@ class UserRepository(Protocol):
         Args:
             id (UUID): The ID of the user to remove.
         """
+        ...
+        
+    async def fetch_user_interests(self, id: UUID) -> List[UserInterests]:
+    
         ...

@@ -62,3 +62,17 @@ async def delete_user(user_id: UUID):
         raise HTTPException(status_code=404, detail="User not found")
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
+    
+@router.get("/{user_id}/interests")
+async def get_user_interests(user_id: UUID):
+    """Get the interests of a specific user."""
+    try:
+        user_interests = await user_service.get_user_interests(
+            user_repository=user_repository,
+            userId=user_id,
+        )
+        return {"message": "User interests retrieved successfully", "interests": user_interests}
+    except UserNotFound:
+        raise HTTPException(status_code=404, detail="User not found")
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))

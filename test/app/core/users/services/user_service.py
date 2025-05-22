@@ -112,18 +112,22 @@ async def remove_interest(
     """
     ...  # TODO: Implement the logic to remove an interest from a user
 
+import logging
+
+# Configuración básica del logging
+logging.basicConfig(
+    level=logging.INFO,  # Nivel de logging
+    format="%(asctime)s - %(levelname)s - %(message)s",  # Formato del mensaje
+)
 
 async def get_user_interests(
     user_repository: UserRepository,
-    user: UserRegistry,
+    userId: UUID,
 ) -> List[UserInterests]:
-    """Get all interests of a user.
+    user_interests = await user_repository.fetch_user_interests(userId)
+    if not user_interests:
+        raise UserNotFound(userId)
 
-    Args:
-        user_repository (UserRepository): The user repository instance.
-        user (UserRegistry): The user whose interests are to be fetched.
+    return user_interests
 
-    Raises:
-        UserNotFound: If the user with the given ID does not exist.
-    """
     ...  # TODO: Implement the logic to get all interests of a user

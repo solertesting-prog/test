@@ -47,3 +47,22 @@ async def remove(id: UUID) -> Optional[User]:
     await user.delete()
 
     return User(**user.model_dump())
+
+import logging
+
+# Configuración básica del logging
+logging.basicConfig(
+    level=logging.INFO,  # Nivel de logging
+    format="%(asctime)s - %(levelname)s - %(message)s",  # Formato del mensaje
+)
+
+async def fetch_user_interests(user_id: UUID) -> Optional[list[UserInterests]]:
+    logging.info(f"Fetching interests for user with ID: {user_id}")
+
+    user = await UserModel.get(user_id)
+    if not user:
+        return None
+    
+    logging.info(f"Interests for user {user_id}: {user.interests}")
+
+    return user.interests
