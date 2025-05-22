@@ -74,5 +74,11 @@ async def update(id: UUID, dto: UpdateNewsArticleDto) -> Optional[NewsArticle]:
     return NewsArticle(**news_article.model_dump())
 
 
-async def remove(id: UUID) -> NewsArticle:
-    raise NotImplementedError("Removing news articles is not implemented yet.")
+async def remove(id: UUID) -> Optional[NewsArticle]:
+    news_article = await NewsArticleModel.get(id)
+    if not news_article:
+        return None 
+
+    await news_article.delete()
+
+    return NewsArticle(**news_article.model_dump())

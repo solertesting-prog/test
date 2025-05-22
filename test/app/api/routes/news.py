@@ -1,6 +1,6 @@
 from uuid import UUID
 
-from fastapi import APIRouter, Query, HTTPException # type: ignore
+from fastapi import APIRouter, Query, HTTPException
 
 from app.core.news.entities.news_article import NewsArticle, NewsCategory, UpdateNewsArticleDto
 from app.core.news.services import news_article_service
@@ -30,10 +30,9 @@ async def get_news_by_id(id: UUID) -> NewsArticle:
 
 import logging
 
-# Configuración básica
 logging.basicConfig(
-    level=logging.INFO,  # Nivel mínimo de log que se registrará
-    format="%(asctime)s - %(levelname)s - %(message)s",  # Formato del mensaje
+    level=logging.INFO,
+    format="%(asctime)s - %(levelname)s - %(message)s",
 )
 
 
@@ -58,6 +57,17 @@ async def update_news_article(
         raise HTTPException(status_code=400, detail=str(e))
 
 
+@router.delete("/{id}")
+async def delete_news_article(id: UUID):
+    """Delete a news article by its ID."""
+    try:
+        # Lógica para eliminar el artículo
+        deleted_article = await news_article_service.remove_news_article(id=id, news_article_repository=news_article_repository) # type: ignore
+        if not deleted_article:
+            raise HTTPException(status_code=404, detail="News article not found")
+        return {"message": "News article removed successfully"}
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
 
 
 

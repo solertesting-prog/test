@@ -37,7 +37,6 @@ class NewsArticleRepository(Protocol):
             skip (int): The number of news articles to skip.
         """
         ...
-
     async def update(
         self, id: UUID, dto: UpdateNewsArticleDto
     ) -> Optional[NewsArticle]:
@@ -46,5 +45,14 @@ class NewsArticleRepository(Protocol):
         Args:
             id (UUID): The ID of the news article to update.
             dto (UpdateNewsArticleDto): The data transfer object containing updated news article details.
+        """
+        ...
+    async def remove(
+        self, id: UUID,
+    ) -> Optional[NewsArticle]:
+        """Remove an existing news article in the database.
+
+        Args:
+            id (UUID): The ID of the news article to update.
         """
         ...

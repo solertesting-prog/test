@@ -43,3 +43,12 @@ async def update_news_article(
 
 
 
+async def remove_news_article(
+    news_article_repository: NewsArticleRepository,
+    id:UUID ,
+) -> NewsArticle:
+
+    deleted_article = await news_article_repository.remove(id=id)
+    if not deleted_article:
+        raise NewsArticleNotFound(article_id=id)
+    return deleted_article
