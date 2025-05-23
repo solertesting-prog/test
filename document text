@@ -1,1 +1,7 @@
-text comments //
+Recommended Materials
+● Beanie ODM Documentation: https://beanie-odm.dev
+● UV Repository: https://github.com/astral-sh/uv
+● Pydantic Documentation: https://docs.pydantic.dev/latest/
+● FastAPI Documentation: https://fastapi.tiangolo.com
+● Concurrency and Async: https://fastapi.tiangolo.com/async/
+● Conventional Commits: https://www.conventionalcommits.org/en/v1.0.0/
