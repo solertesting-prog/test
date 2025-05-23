@@ -2,7 +2,7 @@ from uuid import UUID
 
 from fastapi import APIRouter, Depends, Query, HTTPException
 
-from app.core.news.entities.news_article import NewsArticle, NewsCategory, UpdateNewsArticleDto
+from app.core.news.entities.news_article import NewsArticle, NewsCategory, UpdateNewsArticleDto,CreateNewsArticleDto
 from app.core.news.services import news_article_service
 from app.core.news.services.exceptions import NewsArticleNotFound
 from pydantic import BaseModel
@@ -121,3 +121,18 @@ async def get_news(
         news_article_repository, skip=skip, limit=limit, category=category
     )
     return news
+
+@router.post("/")
+async def create_news_article(
+    news_article: CreateNewsArticleDto,
+) -> NewsArticle:
+    """Create a new news article."""
+    try:
+        
+        created_article = await news_article_service.create_news_article(
+            news_article=CreateNewsArticleDto(**news_article.model_dump()),
+            news_article_repository=news_article_repository,
+        )
+        return created_article
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))

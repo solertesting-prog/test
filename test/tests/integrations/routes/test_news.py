@@ -80,3 +80,27 @@ async def test_delete_news_article(test_client: TestClient, news_id: str, bearer
     else:
         assert response.status_code == 200
         assert response.json()["message"] == "News article removed successfully"
+
+
+@pytest.mark.order(5)
+def test_create_news_article(test_client: TestClient, bearer_token: str) -> None:
+    """Test that the /news/ endpoint creates a new news article."""
+    payload = {
+        "title": "Breaking News",
+        "content": "This is the content of the news article.",
+        "categories": ["sports"],
+    }
+
+    response = test_client.post(
+        "/news/",
+        headers={"Authorization": f"Bearer {bearer_token}"},
+        json=payload,
+    )
+
+    assert response.status_code == 200, f"Unexpected status code: {response.status_code}"
+    data = response.json()
+
+    assert data["title"] == payload["title"]
+    assert data["content"] == payload["content"]
+    assert data["categories"] == payload["categories"]
+    assert "id" in data, "The response should contain an 'id' field"

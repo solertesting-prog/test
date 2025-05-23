@@ -2,7 +2,7 @@ from typing import List
 from uuid import UUID
 
 
-from ..entities.news_article import NewsArticle, NewsCategory, UpdateNewsArticleDto
+from ..entities.news_article import CreateNewsArticleDto, NewsArticle, NewsCategory, UpdateNewsArticleDto
 from ..protocols.news_repository import NewsArticleRepository
 from .exceptions import NewsArticleNotFound
 
@@ -53,3 +53,12 @@ async def remove_news_article(
     if not deleted_article:
         raise NewsArticleNotFound(article_id=id)
     return deleted_article
+
+async def create_news_article(
+    news_article_repository: NewsArticleRepository,
+    news_article: CreateNewsArticleDto,
+) -> NewsArticle:
+    """Create a new news article."""
+   
+    created_article = await news_article_repository.create(dto=news_article)
+    return created_article

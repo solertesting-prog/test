@@ -33,8 +33,10 @@ class NewsArticle(BaseModel):
 class CreateNewsArticleDto(BaseModel):
     title: str = Field(..., max_length=255)
     content: str = Field(..., max_length=5000)
+    categories: List[NewsCategory] = Field(..., max_length=50)
+
 
 
 class UpdateNewsArticleDto(BaseModel):
-    title: str | None = None
-    content: str | None = None
+    title: str = Field(..., max_length=255)
+    content: str = Field(..., max_length=5000)

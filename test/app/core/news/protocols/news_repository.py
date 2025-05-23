@@ -1,4 +1,4 @@
-from ..entities.news_article import NewsArticle, NewsCategory, UpdateNewsArticleDto
+from ..entities.news_article import CreateNewsArticleDto, NewsArticle, NewsCategory, UpdateNewsArticleDto
 from typing import List, Optional, Protocol
 
 from uuid import UUID
@@ -10,7 +10,7 @@ class NewsArticleRepository(Protocol):
     This protocol defines the methods that a news article repository should implement.
     """
 
-    async def create(self, dto: NewsArticle) -> NewsArticle:
+    async def create(self, dto: CreateNewsArticleDto) -> NewsArticle:
         """Create a new news article in the database.
 
         Args:
