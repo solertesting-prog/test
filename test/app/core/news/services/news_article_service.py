@@ -21,9 +21,10 @@ async def get_all_news_articles(
     news_article_repository: NewsArticleRepository,
     skip: int = 0,
     limit: int = 100,
-    category: NewsCategory | None = None,
+    category: str | List[str] | None = None,
 ) -> List[NewsArticle]:
     """Fetch all news articles with pagination."""
+
     return await news_article_repository.fetch_all_by_category(
         category=category, limit=limit, skip=skip
     )

@@ -42,11 +42,20 @@ async def fetch_by_id(id: UUID) -> Optional[NewsArticle]:
 
 
 async def fetch_all_by_category(
-    category: Optional[NewsCategory], limit: int, skip: int
+    category: Optional[str|List[str]], limit: int, skip: int
 ) -> List[NewsArticle]:
     if category:
+        if isinstance(category, str):
+            query = {"categories": category}
+
+        elif isinstance(category, list):
+            query = {"categories": {"$in": category}}
+            
+        else:
+            raise ValueError("Invalid type for category. Must be str or List[str].")
+
         articles = (
-            await NewsArticleModel.find(NewsArticleModel.categories == category)
+            await NewsArticleModel.find(query)
             .skip(skip)
             .limit(limit)
             .to_list()

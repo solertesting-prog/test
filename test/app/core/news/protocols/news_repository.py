@@ -27,7 +27,7 @@ class NewsArticleRepository(Protocol):
         ...
 
     async def fetch_all_by_category(
-        self, category: NewsCategory|None, limit: int, skip: int
+        self, category: str | List[str] | None, limit: int, skip: int
     ) -> List[NewsArticle]:
         """Fetch news articles by category from the database.
 
